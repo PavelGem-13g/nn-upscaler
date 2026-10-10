@@ -16,9 +16,11 @@ MODEL_REGISTRY: dict[str, Callable[..., BaseUpscaler]] = {}
 
 def register_model(name: str):
     """Decorator to register an upscaler class."""
+
     def decorator(cls: Callable[..., BaseUpscaler]):
         MODEL_REGISTRY[name.lower()] = cls
         return cls
+
     return decorator
 
 

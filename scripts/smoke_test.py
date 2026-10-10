@@ -23,7 +23,9 @@ def run_smoke_test():
     # 1. Device check
     device = get_device()
     dev_name = get_device_name(device)
-    console.print(f"[bold green]✔[/bold green] Selected Device: [bold yellow]{dev_name}[/bold yellow] ({device})")
+    console.print(
+        f"[bold green]✔[/bold green] Selected Device: [bold yellow]{dev_name}[/bold yellow] ({device})"
+    )
 
     # 2. Test models forward pass
     table = Table(title="Model Registry & Forward Pass Verification")
@@ -43,28 +45,43 @@ def run_smoke_test():
             with torch.no_grad():
                 out = model(x)
             assert out.shape == (1, 3, 64, 64), f"Unexpected shape {out.shape}"
-            table.add_row(m_name, "4x", str(list(x.shape)), str(list(out.shape)), "[bold green]PASS[/bold green]")
+            table.add_row(
+                m_name,
+                "4x",
+                str(list(x.shape)),
+                str(list(out.shape)),
+                "[bold green]PASS[/bold green]",
+            )
         except Exception as e:
-            table.add_row(m_name, "4x", str(list(x.shape)), "ERROR", f"[bold red]FAIL: {e}[/bold red]")
+            table.add_row(
+                m_name, "4x", str(list(x.shape)), "ERROR", f"[bold red]FAIL: {e}[/bold red]"
+            )
 
     console.print(table)
 
     # 3. Test degradation pipeline
     from PIL import Image
+
     test_img = Image.new("RGB", (64, 64), color=(120, 150, 180))
     degrader = PixelArtDegradation(scale_factor=4, num_colors=16)
     lr_art = degrader(test_img)
     assert lr_art.size == (16, 16), f"Degradation size mismatch: {lr_art.size}"
-    console.print("[bold green]✔[/bold green] PixelArtDegradation pipeline operational (64x64 -> 16x16 with 16-color palette)")
+    console.print(
+        "[bold green]✔[/bold green] PixelArtDegradation pipeline operational (64x64 -> 16x16 with 16-color palette)"
+    )
 
     # 4. Test metrics
     t1 = torch.rand(3, 32, 32)
     t2 = t1 + torch.randn(3, 32, 32) * 0.05
     psnr = calculate_psnr(t2.clamp(0, 1), t1)
     ssim = calculate_ssim(t2.clamp(0, 1), t1)
-    console.print(f"[bold green]✔[/bold green] Metrics calculation operational (PSNR: {psnr:.2f} dB, SSIM: {ssim:.4f})")
+    console.print(
+        f"[bold green]✔[/bold green] Metrics calculation operational (PSNR: {psnr:.2f} dB, SSIM: {ssim:.4f})"
+    )
 
-    console.print("\n[bold green]All systems operational! The repository is ready for experimentation.[/bold green]\n")
+    console.print(
+        "\n[bold green]All systems operational! The repository is ready for experimentation.[/bold green]\n"
+    )
 
 
 if __name__ == "__main__":

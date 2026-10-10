@@ -1,6 +1,5 @@
 """Inference pipeline with optional tile-based execution for arbitrary image sizes."""
 
-
 import numpy as np
 import torch
 from PIL import Image

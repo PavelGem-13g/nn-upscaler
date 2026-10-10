@@ -13,12 +13,25 @@ from nn_upscaler.data.degradation import PixelArtDegradation
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate synthetic pixel art dataset from realistic images.")
-    parser.add_argument("--input-dir", "-i", type=str, required=True, help="Input directory of high-res images")
-    parser.add_argument("--output-dir", "-o", type=str, required=True, help="Output directory for pairs")
+    parser = argparse.ArgumentParser(
+        description="Generate synthetic pixel art dataset from realistic images."
+    )
+    parser.add_argument(
+        "--input-dir", "-i", type=str, required=True, help="Input directory of high-res images"
+    )
+    parser.add_argument(
+        "--output-dir", "-o", type=str, required=True, help="Output directory for pairs"
+    )
     parser.add_argument("--scale", "-s", type=int, default=4, help="Downscale factor")
     parser.add_argument("--colors", "-c", type=int, default=32, help="Target palette size (colors)")
-    parser.add_argument("--palette", "-p", type=str, default=None, choices=["gameboy", "pico8", "cga"], help="Preset palette")
+    parser.add_argument(
+        "--palette",
+        "-p",
+        type=str,
+        default=None,
+        choices=["gameboy", "pico8", "cga"],
+        help="Preset palette",
+    )
     parser.add_argument("--dither", action="store_true", help="Apply Floyd-Steinberg dithering")
 
     args = parser.parse_args()

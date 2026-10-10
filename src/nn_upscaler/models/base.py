@@ -50,7 +50,12 @@ class BaseUpscaler(nn.Module, ABC):
         if isinstance(image, Image.Image):
             tensor = pil_to_tensor(image).unsqueeze(0).to(dev)
         elif isinstance(image, np.ndarray):
-            tensor = torch.from_numpy(image.astype(np.float32) / 255.0).permute(2, 0, 1).unsqueeze(0).to(dev)
+            tensor = (
+                torch.from_numpy(image.astype(np.float32) / 255.0)
+                .permute(2, 0, 1)
+                .unsqueeze(0)
+                .to(dev)
+            )
         elif isinstance(image, torch.Tensor):
             tensor = image.to(dev)
             if tensor.dim() == 3:

@@ -1,6 +1,5 @@
 """Loss functions for super-resolution and depixelization."""
 
-
 import torch
 import torch.nn.functional as F
 from torch import nn
@@ -11,8 +10,12 @@ class GradientLoss(nn.Module):
 
     def __init__(self):
         super().__init__()
-        sobel_x = torch.tensor([[-1.0, 0.0, 1.0], [-2.0, 0.0, 2.0], [-1.0, 0.0, 1.0]], dtype=torch.float32)
-        sobel_y = torch.tensor([[-1.0, -2.0, -1.0], [0.0, 0.0, 0.0], [1.0, 2.0, 1.0]], dtype=torch.float32)
+        sobel_x = torch.tensor(
+            [[-1.0, 0.0, 1.0], [-2.0, 0.0, 2.0], [-1.0, 0.0, 1.0]], dtype=torch.float32
+        )
+        sobel_y = torch.tensor(
+            [[-1.0, -2.0, -1.0], [0.0, 0.0, 0.0], [1.0, 2.0, 1.0]], dtype=torch.float32
+        )
         self.register_buffer("sobel_x", sobel_x.view(1, 1, 3, 3).repeat(3, 1, 1, 1))
         self.register_buffer("sobel_y", sobel_y.view(1, 1, 3, 3).repeat(3, 1, 1, 1))
 
@@ -52,6 +55,7 @@ class CompositeLoss(nn.Module):
         if lpips_weight > 0:
             try:
                 import lpips
+
                 self.lpips_fn = lpips.LPIPS(net=net_type)
                 if device is not None:
                     self.lpips_fn = self.lpips_fn.to(device)

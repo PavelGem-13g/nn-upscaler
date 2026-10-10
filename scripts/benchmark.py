@@ -18,10 +18,19 @@ from nn_upscaler.utils.visualization import create_comparison_grid
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Benchmark super-resolution models on sample pixel art images.")
-    parser.add_argument("--samples", type=str, default="data/samples", help="Directory with sample test images")
+    parser = argparse.ArgumentParser(
+        description="Benchmark super-resolution models on sample pixel art images."
+    )
+    parser.add_argument(
+        "--samples", type=str, default="data/samples", help="Directory with sample test images"
+    )
     parser.add_argument("--scale", type=int, default=4, help="Scale factor")
-    parser.add_argument("--output-dir", type=str, default="outputs/benchmark", help="Directory to save comparison grids")
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="outputs/benchmark",
+        help="Directory to save comparison grids",
+    )
     parser.add_argument("--device", type=str, default=None, help="Device to run benchmark on")
     parser.add_argument("--runs", type=int, default=5, help="Timing repetitions for stability")
 
@@ -35,7 +44,9 @@ def main():
         console.print(f"[bold red]No images found in {samples_dir}[/bold red]")
         sys.exit(1)
 
-    console.print(f"\n[bold cyan]=== Neural Upscaler Model Benchmark ({get_device_name(device)}) ===[/bold cyan]\n")
+    console.print(
+        f"\n[bold cyan]=== Neural Upscaler Model Benchmark ({get_device_name(device)}) ===[/bold cyan]\n"
+    )
 
     models = list_models()
     out_dir = Path(args.output_dir)
@@ -45,7 +56,9 @@ def main():
         console.print(f"[bold yellow]Benchmarking on image: {img_path.name}[/bold yellow]")
         img = Image.open(img_path).convert("RGB")
 
-        table = Table(title=f"Results for {img_path.name} ({img.width}x{img.height} -> {img.width*args.scale}x{img.height*args.scale})")
+        table = Table(
+            title=f"Results for {img_path.name} ({img.width}x{img.height} -> {img.width * args.scale}x{img.height * args.scale})"
+        )
         table.add_column("Model", style="cyan")
         table.add_column("Type", style="magenta")
         table.add_column("Inference Time (ms)", style="green")

@@ -19,15 +19,25 @@ from nn_upscaler.utils.device import get_device, get_device_name
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Train neural upscaler on synthetic or paired data.")
-    parser.add_argument("--config", "-c", type=str, default="configs/default.yaml", help="Path to config file")
-    parser.add_argument("--model", "-m", type=str, default="edsr_light", help="Model architecture name")
+    parser = argparse.ArgumentParser(
+        description="Train neural upscaler on synthetic or paired data."
+    )
+    parser.add_argument(
+        "--config", "-c", type=str, default="configs/default.yaml", help="Path to config file"
+    )
+    parser.add_argument(
+        "--model", "-m", type=str, default="edsr_light", help="Model architecture name"
+    )
     parser.add_argument("--scale", "-s", type=int, default=4, help="Upscale factor")
-    parser.add_argument("--data-dir", "-d", type=str, default="data/samples", help="Directory of training images")
+    parser.add_argument(
+        "--data-dir", "-d", type=str, default="data/samples", help="Directory of training images"
+    )
     parser.add_argument("--epochs", "-e", type=int, default=None, help="Override number of epochs")
     parser.add_argument("--batch-size", "-b", type=int, default=None, help="Override batch size")
     parser.add_argument("--lr", type=float, default=None, help="Override learning rate")
-    parser.add_argument("--device", type=str, default=None, help="Compute device ('mps', 'cuda', 'cpu')")
+    parser.add_argument(
+        "--device", type=str, default=None, help="Compute device ('mps', 'cuda', 'cpu')"
+    )
 
     args = parser.parse_args()
 

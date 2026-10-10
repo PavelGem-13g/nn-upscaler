@@ -19,6 +19,8 @@ def test_inference_pipeline_direct():
 def test_inference_pipeline_tiled():
     img = Image.new("RGB", (32, 32), color=(0, 255, 0))
     model = EDSRLightUpscaler(scale_factor=2, num_blocks=2, num_features=16)
-    pipeline = InferencePipeline(model=model, device=torch.device("cpu"), tile_size=16, tile_overlap=4)
+    pipeline = InferencePipeline(
+        model=model, device=torch.device("cpu"), tile_size=16, tile_overlap=4
+    )
     out = pipeline.run(img)
     assert out.size == (64, 64)

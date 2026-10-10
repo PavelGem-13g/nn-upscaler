@@ -16,17 +16,31 @@ from nn_upscaler.utils.device import get_device, get_device_name
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Upscale pixel art image using neural or classical models.")
+    parser = argparse.ArgumentParser(
+        description="Upscale pixel art image using neural or classical models."
+    )
     parser.add_argument("--input", "-i", type=str, required=True, help="Path to input image")
-    parser.add_argument("--output", "-o", type=str, required=True, help="Path to save upscaled output")
     parser.add_argument(
-        "--model", "-m", type=str, default="edsr_light", choices=list_models(),
+        "--output", "-o", type=str, required=True, help="Path to save upscaled output"
+    )
+    parser.add_argument(
+        "--model",
+        "-m",
+        type=str,
+        default="edsr_light",
+        choices=list_models(),
         help="Model architecture name",
     )
     parser.add_argument("--scale", "-s", type=int, default=4, help="Upscale factor (e.g. 2, 4, 8)")
-    parser.add_argument("--weights", "-w", type=str, default=None, help="Optional path to model weights checkpoint")
-    parser.add_argument("--device", "-d", type=str, default=None, help="Compute device ('mps', 'cuda', 'cpu')")
-    parser.add_argument("--tile-size", type=int, default=None, help="Tile size for memory-safe chunked inference")
+    parser.add_argument(
+        "--weights", "-w", type=str, default=None, help="Optional path to model weights checkpoint"
+    )
+    parser.add_argument(
+        "--device", "-d", type=str, default=None, help="Compute device ('mps', 'cuda', 'cpu')"
+    )
+    parser.add_argument(
+        "--tile-size", type=int, default=None, help="Tile size for memory-safe chunked inference"
+    )
 
     args = parser.parse_args()
 

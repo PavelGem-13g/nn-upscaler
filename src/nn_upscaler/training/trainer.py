@@ -104,7 +104,9 @@ class SuperResolutionTrainer:
 
             val_str = ""
             if val_metrics:
-                val_str = f" | Val PSNR: {val_metrics['psnr']:.2f} dB, SSIM: {val_metrics['ssim']:.4f}"
+                val_str = (
+                    f" | Val PSNR: {val_metrics['psnr']:.2f} dB, SSIM: {val_metrics['ssim']:.4f}"
+                )
             print(f"[Epoch {epoch:03d}/{epochs:03d}] Train Loss: {train_loss:.5f}{val_str}")
 
             # Checkpoint best model

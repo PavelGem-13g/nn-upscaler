@@ -31,17 +31,21 @@ class UpsampleBlock(nn.Sequential):
         if (scale & (scale - 1)) == 0:  # Power of 2 (2, 4, 8)
             num_steps = int(math.log2(scale))
             for _ in range(num_steps):
-                layers.extend([
-                    nn.Conv2d(num_features, num_features * 4, kernel_size=3, padding=1),
-                    nn.PixelShuffle(2),
-                    nn.PReLU(),
-                ])
+                layers.extend(
+                    [
+                        nn.Conv2d(num_features, num_features * 4, kernel_size=3, padding=1),
+                        nn.PixelShuffle(2),
+                        nn.PReLU(),
+                    ]
+                )
         elif scale == 3:
-            layers.extend([
-                nn.Conv2d(num_features, num_features * 9, kernel_size=3, padding=1),
-                nn.PixelShuffle(3),
-                nn.PReLU(),
-            ])
+            layers.extend(
+                [
+                    nn.Conv2d(num_features, num_features * 9, kernel_size=3, padding=1),
+                    nn.PixelShuffle(3),
+                    nn.PReLU(),
+                ]
+            )
         else:
             raise ValueError(f"Unsupported scale factor: {scale}")
         super().__init__(*layers)

@@ -1,6 +1,5 @@
 """Hardware acceleration utilities supporting Apple Silicon (MPS), CUDA, and CPU."""
 
-
 import torch
 
 

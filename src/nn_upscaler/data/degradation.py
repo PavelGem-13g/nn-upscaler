@@ -9,26 +9,55 @@ from PIL import Image
 
 # Preset retro color palettes (RGB 0-255)
 PRESET_PALETTES = {
-    "gameboy": np.array([
-        [15, 56, 15],
-        [48, 98, 48],
-        [139, 172, 15],
-        [155, 188, 15],
-    ], dtype=np.uint8),
-    "pico8": np.array([
-        [0, 0, 0], [29, 43, 83], [126, 37, 83], [0, 135, 81],
-        [171, 82, 54], [95, 87, 79], [194, 195, 199], [255, 241, 232],
-        [255, 0, 77], [255, 163, 0], [255, 236, 39], [0, 228, 54],
-        [41, 173, 255], [131, 118, 156], [255, 119, 168], [255, 204, 170],
-    ], dtype=np.uint8),
-    "cga": np.array([
-        [0, 0, 0], [0, 170, 170], [170, 0, 170], [170, 170, 170],
-        [85, 85, 85], [85, 255, 255], [255, 85, 255], [255, 255, 255],
-    ], dtype=np.uint8),
+    "gameboy": np.array(
+        [
+            [15, 56, 15],
+            [48, 98, 48],
+            [139, 172, 15],
+            [155, 188, 15],
+        ],
+        dtype=np.uint8,
+    ),
+    "pico8": np.array(
+        [
+            [0, 0, 0],
+            [29, 43, 83],
+            [126, 37, 83],
+            [0, 135, 81],
+            [171, 82, 54],
+            [95, 87, 79],
+            [194, 195, 199],
+            [255, 241, 232],
+            [255, 0, 77],
+            [255, 163, 0],
+            [255, 236, 39],
+            [0, 228, 54],
+            [41, 173, 255],
+            [131, 118, 156],
+            [255, 119, 168],
+            [255, 204, 170],
+        ],
+        dtype=np.uint8,
+    ),
+    "cga": np.array(
+        [
+            [0, 0, 0],
+            [0, 170, 170],
+            [170, 0, 170],
+            [170, 170, 170],
+            [85, 85, 85],
+            [85, 255, 255],
+            [255, 85, 255],
+            [255, 255, 255],
+        ],
+        dtype=np.uint8,
+    ),
 }
 
 
-def quantize_palette_pillow(img: Image.Image, num_colors: int = 32, dither: bool = True) -> Image.Image:
+def quantize_palette_pillow(
+    img: Image.Image, num_colors: int = 32, dither: bool = True
+) -> Image.Image:
     """Quantize image colors using Pillow's adaptive octree palette.
 
     Args:
