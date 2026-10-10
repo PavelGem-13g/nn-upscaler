@@ -1,0 +1,17 @@
+# EDSR-Light baseline configuration
+model:
+  name: "edsr_light"
+  scale_factor: 4
+  num_features: 64
+  num_blocks: 8
+  res_scale: 0.1
+
+training:
+  epochs: 50
+  lr: 0.0001
+  batch_size: 16
+
+loss:
+  pixel_weight: 1.0
+  gradient_weight: 0.1
+  lpips_weight: 0.1

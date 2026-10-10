@@ -1,0 +1,15 @@
+# SRCNN baseline configuration
+model:
+  name: "srcnn"
+  scale_factor: 4
+  num_channels: 64
+
+training:
+  epochs: 30
+  lr: 0.0005
+  batch_size: 32
+
+loss:
+  pixel_weight: 1.0
+  gradient_weight: 0.0
+  lpips_weight: 0.0

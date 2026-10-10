@@ -1,0 +1,46 @@
+[project]
+name = "nn-upscaler"
+version = "0.1.0"
+description = "Neural upscaler & filter exploration: from pixel-art to realistic high-resolution imagery"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Pavel" }
+]
+dependencies = [
+    "torch>=2.2.0",
+    "torchvision>=0.17.0",
+    "numpy>=1.26.0",
+    "pillow>=10.0.0",
+    "opencv-python-headless>=4.8.0",
+    "scikit-image>=0.22.0",
+    "pyyaml>=6.0",
+    "tqdm>=4.66.0",
+    "rich>=13.7.0",
+    "pydantic>=2.6.0",
+    "lpips>=0.1.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.3.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nn_upscaler"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+ignore = ["BLE001", "S110"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
