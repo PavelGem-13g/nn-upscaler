@@ -1,0 +1,35 @@
+# Configuration for Vector-Quantized Codebook Prior Upscaler (Phase 4.1)
+seed: 42
+scale_factor: 4
+device: null
+
+model:
+  name: "codebook_prior"
+  num_features: 64
+  num_embeddings: 512
+  embedding_dim: 64
+  num_blocks: 6
+  beta: 0.25
+  res_scale: 0.2
+
+data:
+  patch_size: 64
+  batch_size: 8
+  augment: true
+  random_degradation: true
+
+training:
+  stage: "codebook"
+  epochs: 15
+  lr: 0.00015
+  save_freq: 5
+  checkpoint_dir: "checkpoints/codebook_prior"
+
+loss:
+  pixel_type: "charbonnier"
+  pixel_weight: 1.0
+  gradient_weight: 0.10
+  fft_weight: 0.05
+  vgg_weight: 0.10
+  lpips_weight: 0.05
+  vq_weight: 0.25

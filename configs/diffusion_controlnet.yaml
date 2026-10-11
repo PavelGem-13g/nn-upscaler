@@ -1,0 +1,34 @@
+# Configuration for ControlNet-Tile Realism Diffusion Pipeline (Phase 5.1 & 5.3)
+pipeline:
+  backend: "sdxl"
+  base_model_id: "stabilityai/stable-diffusion-xl-base-1.0"
+  controlnet_model_id: "xinsir/controlnet-tile-sdxl-1.0"
+  vae_model_id: "madebyollin/sdxl-vae-fp16-fix"
+  scheduler: "dpmsolver++"
+  use_karras_sigmas: true
+
+inference:
+  target_resolution: [1024, 1024]
+  tile_weight: 0.75
+  steps: 28
+  guidance_scale: 7.0
+  seed: 42
+  enable_vae_tiling: true
+
+preprocessing:
+  bilateral_filter:
+    enabled: true
+    d: 9
+    sigma_color: 75.0
+    sigma_space: 75.0
+
+prompt_templates:
+  general: "photorealistic highly detailed photograph, 8k resolution, raw photo, physical materials"
+  face: "photorealistic close-up portrait, highly detailed human face, natural skin pores, subsurface scattering, realistic sharp eyes, cinematic lighting, 8k"
+  armor: "photorealistic knight plate armor, polished steel, realistic metallic reflections, rivets, fine battle scratches, weathered metal, intricate craftsmanship, 8k"
+  character: "photorealistic character portrait, highly detailed costume, intricate clothing textures, realistic fabric weave, studio lighting, sharp features, 8k"
+  creature: "photorealistic mythical creature, highly detailed organic skin, realistic scales and fur, sharp eyes, anatomical precision, cinematic lighting, 8k"
+  nature: "photorealistic lush landscape, highly detailed foliage, tree bark, stone textures, natural sunlight, 8k landscape photography"
+  stone_architecture: "photorealistic medieval stone castle, ancient masonry, weathered bricks, realistic moss and mortar, dramatic architectural lighting, 8k"
+
+negative_prompt: "pixelated, low resolution, 8-bit, 16-bit, blocky, cartoon, blurry, bad anatomy, artifacts, oversaturated, jpeg compression, drawing, illustration"

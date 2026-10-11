@@ -8,8 +8,15 @@ from nn_upscaler.models.classical import (
     BilinearUpscaler,
     NearestNeighborUpscaler,
 )
+from nn_upscaler.models.codebook_prior import CodebookUpscaler
+from nn_upscaler.models.cut import CUTUpscaler
 from nn_upscaler.models.edsr_light import EDSRLightUpscaler
+from nn_upscaler.models.grid_aware import GridAwareUpscaler
+from nn_upscaler.models.latent_diffusion import LatentDiffusionUpscaler
+from nn_upscaler.models.rrdb import RRDBNet
+from nn_upscaler.models.semantic_conditioned import SemanticConditionedUpscaler
 from nn_upscaler.models.srcnn import SRCNNUpscaler
+from nn_upscaler.models.swinir import SwinIRLightUpscaler
 
 MODEL_REGISTRY: dict[str, Callable[..., BaseUpscaler]] = {}
 
@@ -31,6 +38,14 @@ def register_builtin_models():
     register_model("bilinear")(BilinearUpscaler)
     register_model("srcnn")(SRCNNUpscaler)
     register_model("edsr_light")(EDSRLightUpscaler)
+    register_model("rrdb")(RRDBNet)
+    register_model("esrgan")(RRDBNet)
+    register_model("swinir")(SwinIRLightUpscaler)
+    register_model("grid_aware")(GridAwareUpscaler)
+    register_model("codebook_prior")(CodebookUpscaler)
+    register_model("semantic_conditioned")(SemanticConditionedUpscaler)
+    register_model("cut_unpaired")(CUTUpscaler)
+    register_model("latent_diffusion")(LatentDiffusionUpscaler)
 
 
 # Auto-register on import

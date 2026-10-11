@@ -1,0 +1,31 @@
+# Configuration for Latent Diffusion Upscaler (Phase 5.2)
+seed: 42
+scale_factor: 4
+device: null
+
+model:
+  name: "latent_diffusion"
+  latent_channels: 4
+  num_features: 64
+  cond_dim: 64
+  num_steps: 4
+  train_timesteps: 1000
+  tile_weight: 0.75
+
+data:
+  patch_size: 64
+  batch_size: 8
+  augment: true
+  random_degradation: true
+
+training:
+  stage: "diffusion"
+  epochs: 20
+  lr: 0.0001
+  save_freq: 5
+  checkpoint_dir: "checkpoints/latent_diffusion"
+
+loss:
+  diffusion_weight: 1.0
+  recon_weight: 0.10
+  lpips_weight: 0.05

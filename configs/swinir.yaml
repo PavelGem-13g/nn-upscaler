@@ -1,0 +1,34 @@
+# Configuration for SwinIR-Light (Transformer Super-Resolution)
+seed: 42
+scale_factor: 4
+device: null
+
+model:
+  name: "swinir"
+  embed_dim: 48
+  depths: [2, 2, 2, 2]
+  num_heads: [6, 6, 6, 6]
+  window_size: 8
+  mlp_ratio: 2.0
+
+data:
+  patch_size: 64
+  batch_size: 8
+  augment: true
+  random_degradation: true
+
+training:
+  stage: "psnr"
+  epochs: 15
+  lr: 0.0002
+  save_freq: 5
+  checkpoint_dir: "checkpoints/swinir"
+
+loss:
+  pixel_type: "charbonnier"
+  pixel_weight: 1.0
+  gradient_weight: 0.1
+  fft_weight: 0.05
+  vgg_weight: 0.0
+  lpips_weight: 0.0
+  gan_weight: 0.0

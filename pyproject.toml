@@ -26,6 +26,22 @@ dev = [
     "pytest>=8.0.0",
     "ruff>=0.3.0",
 ]
+diffusion = [
+    "diffusers>=0.27.0",
+    "accelerate>=0.28.0",
+    "transformers>=4.38.0",
+]
+export = [
+    "onnx>=1.15.0",
+    "onnxruntime>=1.17.0",
+    "onnxscript>=0.7.0",
+]
+coreml = [
+    "coremltools>=7.0; sys_platform == 'darwin'",
+]
+ui = [
+    "gradio>=4.20.0",
+]
 
 [build-system]
 requires = ["hatchling"]

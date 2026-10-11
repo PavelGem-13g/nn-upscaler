@@ -41,6 +41,7 @@ weights/
 
 # Datasets and outputs
 data/raw/
+data/hr_raw/
 data/processed/
 data/synthetic/
 outputs/
@@ -59,3 +60,8 @@ wandb/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Model export artifacts
+*.onnx
+*.mlpackage
+exported_models/

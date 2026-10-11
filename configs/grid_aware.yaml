@@ -1,0 +1,33 @@
+# Configuration for GridAwareUpscaler (Edge & Grid Guidance Depixelization)
+seed: 42
+scale_factor: 4
+device: null
+
+model:
+  name: "grid_aware"
+  num_features: 64
+  cond_features: 32
+  num_blocks: 6
+  res_scale: 0.2
+
+data:
+  patch_size: 64
+  batch_size: 8
+  augment: true
+  random_degradation: true
+
+training:
+  stage: "psnr"
+  epochs: 15
+  lr: 0.00015
+  save_freq: 5
+  checkpoint_dir: "checkpoints/grid_aware"
+
+loss:
+  pixel_type: "charbonnier"
+  pixel_weight: 1.0
+  gradient_weight: 0.15
+  fft_weight: 0.08
+  vgg_weight: 0.0
+  lpips_weight: 0.0
+  gan_weight: 0.0

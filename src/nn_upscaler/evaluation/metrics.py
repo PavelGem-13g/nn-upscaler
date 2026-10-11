@@ -1,10 +1,14 @@
-"""Quality assessment metrics: PSNR, SSIM, and error maps."""
+"""Quality assessment metrics: PSNR, SSIM, LPIPS, and error maps."""
 
 import math
+from typing import Any
 
 import torch
 import torch.nn.functional as F
 from skimage.metrics import structural_similarity as ssim_fn
+
+# Cached LPIPS model instances per device
+_LPIPS_CACHE: dict[str, Any] = {}  # type: ignore
 
 
 def calculate_psnr(pred: torch.Tensor, target: torch.Tensor, max_val: float = 1.0) -> float:
@@ -54,9 +58,67 @@ def calculate_ssim(pred: torch.Tensor, target: torch.Tensor) -> float:
     return float(val)
 
 
-def evaluate_pair(pred: torch.Tensor, target: torch.Tensor) -> dict[str, float]:
-    """Calculate all standard metrics for an output and reference pair."""
-    return {
+def calculate_lpips(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    net_type: str = "alex",
+    device: torch.device | None = None,
+) -> float:
+    """Calculate Learned Perceptual Image Patch Similarity (LPIPS).
+
+    Args:
+        pred: Predicted tensor [C, H, W] or [B, C, H, W] in range [0, 1].
+        target: Ground truth tensor in range [0, 1].
+        net_type: Feature extractor backbone ('alex' or 'vgg').
+        device: Device to run computation on.
+
+    Returns:
+        LPIPS perceptual distance (lower is better, 0.0 is identical).
+    """
+    import lpips
+
+    if pred.dim() == 3:
+        pred = pred.unsqueeze(0)
+    if target.dim() == 3:
+        target = target.unsqueeze(0)
+
+    target_dev = device or pred.device
+    dev_key = f"{net_type}_{target_dev}"
+    if dev_key not in _LPIPS_CACHE:
+        lpips_model = lpips.LPIPS(net=net_type).to(target_dev)
+        lpips_model.eval()
+        _LPIPS_CACHE[dev_key] = lpips_model
+    else:
+        lpips_model = _LPIPS_CACHE[dev_key]
+
+    # LPIPS expects input range [-1, 1]
+    p_norm = (pred.to(target_dev) * 2.0 - 1.0).clamp(-1.0, 1.0)
+    t_norm = (target.to(target_dev) * 2.0 - 1.0).clamp(-1.0, 1.0)
+
+    # AlexNet expects spatial dimension at least 64x64
+    if p_norm.shape[-2] < 64 or p_norm.shape[-1] < 64:
+        p_norm = F.interpolate(p_norm, size=(64, 64), mode="bicubic", align_corners=False)
+        t_norm = F.interpolate(t_norm, size=(64, 64), mode="bicubic", align_corners=False)
+
+    with torch.no_grad():
+        dist = lpips_model(p_norm, t_norm).mean().item()
+    return float(dist)
+
+
+def evaluate_pair(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    compute_lpips: bool = False,
+    device: torch.device | None = None,
+) -> dict[str, float]:
+    """Calculate standard metrics for an output and reference pair."""
+    results = {
         "psnr": calculate_psnr(pred, target),
         "ssim": calculate_ssim(pred, target),
     }
+    if compute_lpips:
+        try:
+            results["lpips"] = calculate_lpips(pred, target, device=device)
+        except Exception as e:
+            print(f"[Warning] Failed to compute LPIPS: {e}")
+    return results

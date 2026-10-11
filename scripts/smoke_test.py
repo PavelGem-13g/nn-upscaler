@@ -79,6 +79,48 @@ def run_smoke_test():
         f"[bold green]✔[/bold green] Metrics calculation operational (PSNR: {psnr:.2f} dB, SSIM: {ssim:.4f})"
     )
 
+    # 5. Test ONNX Export and ONNX Runtime inference
+    import shutil
+    import tempfile
+
+    from nn_upscaler.export.onnx_exporter import (
+        ONNXUpscaler,
+        export_to_onnx,
+        verify_onnx_equivalence,
+    )
+    from nn_upscaler.export.quantization import quantize_dynamic_int8, quantize_fp16
+
+    tmp_smoke_dir = Path(tempfile.mkdtemp(prefix="smoke_onnx_"))
+    try:
+        mini_model = get_model("edsr_light", scale_factor=4).eval()
+        onnx_file = tmp_smoke_dir / "smoke_edsr.onnx"
+        export_to_onnx(mini_model, onnx_file, scale=4, input_size=(1, 3, 16, 16), check_model=True)
+        onnx_upscaler = ONNXUpscaler(onnx_file, scale_factor=4)
+        x_smoke = torch.rand(1, 3, 16, 16)
+        y_smoke = onnx_upscaler(x_smoke)
+        assert y_smoke.shape == (1, 3, 64, 64)
+        equiv = verify_onnx_equivalence(
+            mini_model, onnx_upscaler, scale_factor=4, input_shape=(1, 3, 16, 16)
+        )
+        assert equiv["matches"], f"ONNX equivalence check failed: diff={equiv['max_abs_diff']}"
+        console.print(
+            f"[bold green]✔[/bold green] ONNX export & ONNX Runtime execution operational (Max Diff: {equiv['max_abs_diff']:.2e})"
+        )
+
+        # 6. Test Quantization (FP16 & Dynamic INT8)
+        fp16_model = quantize_fp16(mini_model)
+        y_fp16 = fp16_model(x_smoke)
+        assert y_fp16.shape == (1, 3, 64, 64)
+
+        int8_model = quantize_dynamic_int8(mini_model)
+        y_int8 = int8_model(x_smoke)
+        assert y_int8.shape == (1, 3, 64, 64)
+        console.print(
+            "[bold green]✔[/bold green] Quantization pipelines operational (FP16 & Dynamic INT8)"
+        )
+    finally:
+        shutil.rmtree(tmp_smoke_dir, ignore_errors=True)
+
     console.print(
         "\n[bold green]All systems operational! The repository is ready for experimentation.[/bold green]\n"
     )

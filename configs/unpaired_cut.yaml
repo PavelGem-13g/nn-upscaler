@@ -1,0 +1,39 @@
+# Configuration for Contrastive Unpaired Translation (Phase 4.3 CUT)
+seed: 42
+scale_factor: 4
+device: null
+
+model:
+  name: "cut_unpaired"
+  num_features: 64
+  num_blocks: 6
+  proj_dim: 128
+  res_scale: 0.2
+
+discriminator:
+  name: "unet_spectral"
+  num_features: 32
+
+data:
+  mode: "unpaired"
+  domain_x: "data/benchmarks/authentic_pixel_art"
+  domain_y: "data/hr_raw"
+  lr_patch_size: 32
+  batch_size: 4
+  augment: true
+
+training:
+  stage: "unpaired_cut"
+  gan: true
+  epochs: 15
+  lr_g: 0.0001
+  lr_d: 0.0001
+  save_freq: 5
+  checkpoint_dir: "checkpoints/unpaired_cut"
+
+loss:
+  patchnce_weight: 1.0
+  gan_weight: 0.005
+  identity_weight: 0.1
+  tau: 0.07
+  num_patches: 256
